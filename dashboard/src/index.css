@@ -1,0 +1,259 @@
+/* ===== Global ===== */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  background:linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+}
+
+/* ===== Dashboard Layout ===== */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ===== Watchlist Sidebar ===== */
+.watchlist-container {
+  width: 30%;
+  min-width: 280px;
+  background: #3f1818;
+  border-right: 1px solid #383272;
+  /* overflow-y: auto; */
+  padding-left: 50px;
+}
+
+/* ===== Main Content Area ===== */
+.content {
+  flex: 1;
+  padding: 40px 60px;
+  
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* Ensure children don't overflow */
+.content > * {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== Titles ===== */
+.title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-left: 30px;
+  color: 
+  #313131;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  padding: 10px 18px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.btn-blue {
+  background: #4184f3;
+}
+
+.btn-blue:hover {
+  background: #2f6fe0;
+}
+
+.btn-green {
+  background: #4caf50;
+}
+
+.btn-green:hover {
+  background: #3f9f45;
+}
+
+/* ===== Summary Section ===== */
+.summary-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px;
+  
+  
+}
+
+.summary-box {
+  background: radial-gradient(circle,rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  padding: 25px;
+  border-radius: 50px;
+  box-shadow: 0 2px 10px rgba(206, 178, 178, 0.04);
+  flex: 1;
+  margin-left: 50px;
+}
+
+.summary-box h5 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.summary-box p {
+  font-size: 0.85rem;
+  color: #103948;
+  margin-top: 8px;
+}
+
+/* ===== Holdings Table (Improved Spacing) ===== */
+.order-table {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.order-table table {
+  width: 100%;
+  border-collapse: separate; 
+        /* Important */
+  border-spacing: 0 14px;     
+        /* Vertical gap between rows */
+}
+
+.order-table thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #862626;
+  padding-bottom: 10px;
+  
+}
+
+.order-table tbody tr {
+  background: #713636;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  transition: 0.2s ease;
+  
+}
+
+.order-table tbody tr:hover {
+  transform: translateY(-2px);
+}
+
+.order-table td {
+  padding: 18px 16px;
+  font-size: 0.95rem;
+  color: #63896f;
+}
+
+.order-table td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.order-table td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* ===== Profit / Loss Colors ===== */
+.profit {
+  margin-left: 5px;
+  color: #2ecc71;
+  font-weight: 500;
+}
+
+.loss {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+/* ===== HOLDINGS ALIGNMENT FIX ===== */
+
+/* Align first column left */
+.order-table th:nth-child(1),
+.order-table td:nth-child(1) {
+  text-align: left;
+  padding-left: 28px;
+  font-weight: 600;
+}
+
+/* Align numeric columns properly to right */
+.order-table th:nth-child(n+2),
+.order-table td:nth-child(n+2) {
+  text-align: right;
+  padding-right: 28px;
+}
+
+/* Increase visible vertical spacing */
+.order-table table {
+  border-spacing: 0 22px;   /* stronger gap */
+}
+
+/* Improve row card look */
+.order-table tbody tr {
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+/* Smooth hover */
+.order-table tbody tr:hover {
+  background: #f1f5ff;
+}
+
+/* Slightly increase internal spacing */
+.order-table td {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+/* ===== FINAL HOLDINGS FIX (DO NOT REMOVE ABOVE CSS) ===== */
+
+/* Stronger vertical row gap */
+.order-table table {
+  border-spacing: 0 28px;
+}
+
+/* Make rows look like proper cards */
+.order-table tbody tr {
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* Make spacing clearly visible */
+.order-table td {
+  padding: 24px 28px;
+}
+
+/* Proper column alignment */
+.order-table th:first-child,
+.order-table td:first-child {
+  text-align: left;
+  padding-left: 35px;
+}
+
+.order-table th:not(:first-child),
+.order-table td:not(:first-child) {
+  text-align: right;
+  padding-right: 35px;
+}
+
+/* Improve header visibility */
+.order-table thead th {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #555;
+  padding-bottom: 16px;
+}
+
+/* Better hover effect */
+.order-table tbody tr:hover {
+  background: #eef3ff;
+  transform: translateY(-3px);
+}
+
