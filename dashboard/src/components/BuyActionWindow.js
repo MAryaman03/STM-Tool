@@ -5,12 +5,10 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import GeneralContext from "./GeneralContext";
 import VerticalGraph from "./VerticalGraph";
 import "./BuyActionWindow.css";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
 
 const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
   const { closeBuyWindow, refreshDashboard } = useContext(GeneralContext);
@@ -21,6 +19,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
   const [holdings, setHoldings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [confirmStep, setConfirmStep] = useState(false);
 
   // =====================================
   // Sync price when selected stock changes
@@ -34,7 +33,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
   // =====================================
   const fetchHoldings = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/allHoldings`);
+      const res = await api.get("/allHoldings");
       setHoldings(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Failed to fetch holdings:", err);
@@ -44,6 +43,14 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
   useEffect(() => {
     fetchHoldings();
   }, [fetchHoldings]);
+
+  // Disable background scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   // =====================================
   // Safe Parsed Values
@@ -137,26 +144,30 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
       }
     }
 
-    const confirm = window.confirm(
-      `Confirm ${mode} ${parsedQuantity} shares of ${uid} at ₹${parsedPrice}?`
-    );
-
-    if (!confirm) return;
+    // Two-step confirmation: first click shows confirm, second click executes
+    if (!confirmStep) {
+      setConfirmStep(true);
+      return;
+    }
 
     try {
       setLoading(true);
 
-      await axios.post(`${API_URL}/newOrder`, {
+      await api.post("/newOrder", {
         name: uid,
         qty: parsedQuantity,
         price: parsedPrice,
         mode,
       });
 
+      // Backend handles funds deduction/addition automatically
+
+      setConfirmStep(false);
       await fetchHoldings();
       refreshDashboard?.();
       closeBuyWindow();
     } catch (err) {
+      setConfirmStep(false);
       setError(
         err.response?.data?.error || "Transaction failed. Please try again."
       );
@@ -169,7 +180,16 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
   // UI
   // =====================================
   return (
-    <div className="container position-relative" id="trade-window">
+    <div className="modal-overlay">
+      <div className="container position-relative" id="trade-window">
+
+        {/* Back Arrow */}
+      <button className="trade-back-btn" onClick={closeBuyWindow} title="Back to Dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </button>
 
       {loading && (
         <div className="loading-overlay">
@@ -177,22 +197,22 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
         </div>
       )}
 
-      <div className="regular-order">
+      <div className="regular-order" style={{ justifyContent: "flex-start", overflowY: "auto", paddingTop: "70px" }}>
 
         {graphData && (
-          <div style={{ marginBottom: "40px" }}>
+          <div style={{ width: "100%", flexGrow: 1, display: "flex", flexDirection: "column" }}>
             <VerticalGraph data={graphData} />
           </div>
         )}
 
-        <h3 style={{ marginBottom: "25px" }}>
+        <h3 style={{ marginBottom: "15px", marginTop: "10px", textAlign: "center", width: "100%" }}>
           {mode} {uid}
         </h3>
 
         {/* Mode Toggle */}
-        <div style={{ display: "flex", gap: "20px", marginBottom: "25px" }}>
+        <div style={{ display: "flex", gap: "15px", marginBottom: "20px", justifyContent: "center", width: "100%" }}>
           <button
-            className={`btn ${mode === "BUY" ? "btn-blue" : "btn-grey"}`}
+            className={`btn ${mode === "BUY" ? "btn-green" : "btn-grey"}`}
             onClick={() => setMode("BUY")}
             disabled={loading}
           >
@@ -200,7 +220,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
           </button>
 
           <button
-            className={`btn ${mode === "SELL" ? "btn-blue" : "btn-grey"}`}
+            className={`btn ${mode === "SELL" ? "btn-green" : "btn-grey"}`}
             onClick={() => setMode("SELL")}
             disabled={loading || !ownedStock}
           >
@@ -240,7 +260,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
             marginTop: "20px",
             fontSize: "1.2rem",
             fontWeight: 700,
-            color: mode === "BUY" ? "#2563eb" : "#dc2626",
+            color: mode === "BUY" ? "#22c55e" : "#fb7185",
           }}
         >
           Total: ₹{totalAmount.toLocaleString("en-IN")}
@@ -252,7 +272,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
             style={{
               marginTop: "10px",
               fontWeight: 600,
-              color: pnlPreview >= 0 ? "#16a34a" : "#dc2626",
+              color: pnlPreview >= 0 ? "#22c55e" : "#fb7185",
             }}
           >
             Estimated P&L: ₹{pnlPreview.toLocaleString("en-IN")}
@@ -261,7 +281,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
 
         {/* Error */}
         {error && (
-          <div style={{ color: "#ff4d4f", marginTop: "15px" }}>
+          <div style={{ color: "#fb7185", marginTop: "15px" }}>
             {error}
           </div>
         )}
@@ -274,18 +294,23 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
           Required: ₹{totalAmount.toLocaleString("en-IN")}
         </span>
 
-        <div style={{ display: "flex", gap: "25px" }}>
+        <div style={{ display: "flex", gap: "20px" }}>
           <button
-            className="btn btn-blue"
+            className={`btn ${confirmStep ? "btn-confirm-pulse" : "btn-green"}`}
             onClick={handleSubmit}
             disabled={loading}
+            style={confirmStep ? {
+              background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+              boxShadow: "0 8px 20px rgba(245, 158, 11, 0.35)",
+              animation: "pulse 1s infinite"
+            } : {}}
           >
-            {loading ? "Processing..." : mode}
+            {loading ? "Processing..." : confirmStep ? `Confirm ${mode} ✓` : mode}
           </button>
 
           <button
             className="btn btn-grey"
-            onClick={closeBuyWindow}
+            onClick={() => { setConfirmStep(false); closeBuyWindow(); }}
             disabled={loading}
           >
             Cancel
@@ -293,6 +318,7 @@ const BuyActionWindow = ({ uid, currentPrice = 0 }) => {
         </div>
       </div>
 
+      </div>
     </div>
   );
 };

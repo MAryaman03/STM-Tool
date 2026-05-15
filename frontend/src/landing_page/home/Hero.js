@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ImageCard from "../../components/ImageCard";
 
 function Hero() {
   const navigate = useNavigate();
@@ -16,11 +17,13 @@ function Hero() {
       <div className="container text-center">
 
         {/* Hero Image */}
-        <img
-          src="/images/homeHero.png"
-          alt="Trading dashboard"
-          className="img-fluid hero-img mb-4"
-        />
+        <div className="mb-5 d-flex justify-content-center">
+          <ImageCard
+            src="/images/homeHero.png"
+            alt="Trading dashboard"
+            imageClassName="hero-img"
+          />
+        </div>
 
         {/* Headline */}
         <h1 className="hero-title">

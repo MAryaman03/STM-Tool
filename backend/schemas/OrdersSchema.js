@@ -5,42 +5,37 @@ const OrdersSchema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
       index: true,
     },
-
     name: {
       type: String,
       required: true,
       trim: true,
     },
-
     qty: {
       type: Number,
       required: true,
       min: 1,
     },
-
     price: {
       type: Number,
       required: true,
       min: 0,
     },
-
     mode: {
       type: String,
       required: true,
-      enum: ["BUY", "SELL"],
+      enum: ["BUY", "SELL"], // prevents invalid values
     },
-
     status: {
       type: String,
       enum: ["OPEN", "COMPLETED", "CANCELLED"],
-      default: "COMPLETED",
+      default: "OPEN",
     },
   },
   {
-    timestamps: true,
+    timestamps: true, // adds createdAt & updatedAt
   }
 );
 

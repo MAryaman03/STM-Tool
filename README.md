@@ -7,9 +7,3 @@ This is a full-stack project that contains three main parts:
 
 ---
 
-## 🚀 Getting Started
-
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/Arpitadash02/SMT.git
-cd SMT

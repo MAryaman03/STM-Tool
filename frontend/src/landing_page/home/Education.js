@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ImageCard from "../../components/ImageCard";
 
 function Education() {
   return (
@@ -20,12 +21,12 @@ function Education() {
         {/* Right Content */}
         <div className="col-lg-6">
 
-          <h2 className="fw-bold mb-4">
+          <h2 className="fw-bold mb-4 text-white">
             Free and open market education
           </h2>
 
-          <p className="text-muted fs-5">
-            <strong>Varsity</strong>, the largest online stock market education
+          <p className="text-gray-300 fs-5">
+            <strong className="text-white">Varsity</strong>, the largest online stock market education
             platform covering everything from basics to advanced trading.
           </p>
 
@@ -34,8 +35,8 @@ function Education() {
             <i className="fa fa-long-arrow-right ms-2"></i>
           </Link>
 
-          <p className="text-muted fs-5 mt-4">
-            <strong>TradingQ&A</strong>, the most active trading and investment
+          <p className="text-gray-300 fs-5 mt-4">
+            <strong className="text-white">TradingQ&A</strong>, the most active trading and investment
             community in India for all your market-related queries.
           </p>
 

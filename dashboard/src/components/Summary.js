@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo, useContext } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import GeneralContext from "./GeneralContext";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
 
 const Summary = () => {
   const { refreshKey } = useContext(GeneralContext);
@@ -11,6 +9,8 @@ const Summary = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [fundsBalance, setFundsBalance] = useState(0);
+
   // ==========================
   // Fetch Holdings (Auto Refresh)
   // ==========================
@@ -18,8 +18,14 @@ const Summary = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(`${API_URL}/allHoldings`);
+      const response = await api.get("/allHoldings");
       setHoldings(Array.isArray(response.data) ? response.data : []);
+
+      // Also fetch funds balance
+      try {
+        const fundsRes = await api.get("/funds/balance");
+        setFundsBalance(fundsRes.data.balance || 0);
+      } catch {} // ignore if fails
     } catch (err) {
       console.error("Error fetching summary data:", err);
       setError("Failed to load summary data.");
@@ -79,33 +85,51 @@ const Summary = () => {
       <h3 className="title">Portfolio Summary</h3>
 
       {/* ===== Portfolio Cards ===== */}
-      <div className="summary-container">
-        <div className="summary-box">
-          <h5>₹{formatCurrency(portfolio.totalInvestment)}</h5>
-          <p>Total Investment</p>
+      <div className="summary-cards-grid four-col">
+        <div className="summary-card">
+          <p className="summary-card-label">Available Funds</p>
+          <h4 className="summary-card-value" style={{ color: "#34d399" }}>
+            ₹{formatCurrency(fundsBalance)}
+          </h4>
         </div>
 
-        <div className="summary-box">
-          <h5>₹{formatCurrency(portfolio.totalCurrentValue)}</h5>
-          <p>Current Value</p>
+        <div className="summary-card">
+          <p className="summary-card-label">Total Investment</p>
+          <h4 className="summary-card-value">
+            ₹{formatCurrency(portfolio.totalInvestment)}
+          </h4>
         </div>
 
-        <div className="summary-box">
-          <h5
-            className={
-              portfolio.totalPnL >= 0 ? "profit" : "loss"
-            }
-          >
-            ₹{formatCurrency(portfolio.totalPnL)} (
-            {portfolio.totalPnLPercent.toFixed(2)}%)
-          </h5>
-          <p>Total P&amp;L</p>
+        <div className="summary-card">
+          <p className="summary-card-label">Current Value</p>
+          <h4 className="summary-card-value">
+            ₹{formatCurrency(portfolio.totalCurrentValue)}
+          </h4>
+        </div>
+
+        <div className="summary-card">
+          <p className="summary-card-label">Total P&L</p>
+          <h4 className={`summary-card-value ${portfolio.totalPnL >= 0 ? "profit" : "loss"}`}>
+            ₹{formatCurrency(portfolio.totalPnL)}
+          </h4>
+          <span className={`summary-card-percent ${portfolio.totalPnL >= 0 ? "profit" : "loss"}`}>
+            {portfolio.totalPnLPercent >= 0 ? "+" : ""}
+            {portfolio.totalPnLPercent.toFixed(2)}%
+          </span>
         </div>
       </div>
 
       {/* ===== Holdings Table ===== */}
       {ownedStocks.length === 0 ? (
-        <p>No holdings yet.</p>
+        <div className="positions-empty">
+          <div className="positions-empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <h4>No stocks in portfolio</h4>
+          <p>Start by adding funds and buying stocks from the watchlist.</p>
+        </div>
       ) : (
         <div className="order-table">
           <table>
@@ -116,7 +140,7 @@ const Summary = () => {
                 <th>Avg</th>
                 <th>LTP</th>
                 <th>Current Value</th>
-                <th>P&amp;L</th>
+                <th>P&L</th>
               </tr>
             </thead>
 
