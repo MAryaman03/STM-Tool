@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import GeneralContext from "./GeneralContext";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
 
 const Orders = () => {
   const { refreshKey } = useContext(GeneralContext);
@@ -15,7 +13,7 @@ const Orders = () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(`${API_URL}/allOrders`);
+      const res = await api.get("/allOrders");
 
       // Sort latest orders first
       const sortedOrders = [...res.data].reverse();
@@ -53,11 +51,11 @@ const Orders = () => {
           <table>
             <thead>
               <tr>
-                <th>Stock</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Mode</th>
-                <th>Total</th>
+                <th className="text-left">Stock</th>
+                <th className="text-right">Qty</th>
+                <th className="text-right">Price</th>
+                <th className="text-center">Mode</th>
+                <th className="text-right">Total</th>
               </tr>
             </thead>
 
@@ -67,17 +65,17 @@ const Orders = () => {
 
                 return (
                   <tr key={order._id}> {/* ✅ FIXED KEY */}
-                    <td>{order.name}</td>
-                    <td>{order.qty}</td>
-                    <td>₹{formatCurrency(order.price)}</td>
+                    <td className="text-left">{order.name}</td>
+                    <td className="text-right">{order.qty}</td>
+                    <td className="text-right">₹{formatCurrency(order.price)}</td>
                     <td
-                      className={
+                      className={`text-center ${
                         order.mode === "BUY" ? "profit" : "loss"
-                      }
+                      }`}
                     >
                       {order.mode}
                     </td>
-                    <td>₹{formatCurrency(total)}</td>
+                    <td className="text-right">₹{formatCurrency(total)}</td>
                   </tr>
                 );
               })}

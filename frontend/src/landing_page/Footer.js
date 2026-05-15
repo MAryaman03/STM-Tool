@@ -3,31 +3,30 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-light mt-5">
-      <div className="container pt-5 border-top">
+    <footer className="mt-5" style={{ background: "linear-gradient(180deg, #020617 0%, #041b14 100%)", color: "#ffffff" }}>
+      <div className="container pt-5 border-t border-white/10">
 
         <div className="row gy-4">
 
           {/* Brand */}
           <div className="col-md-3">
             <img
-              src="/images/logo.svg"
+              src={process.env.PUBLIC_URL + "/images/newlogo.png"}
               alt="Wave Logo"
-              style={{ width: "120px" }}
+              style={{ width: "180px", transform: "scale(1.2)", transformOrigin: "left center" }}
               className="mb-3"
-              onError={(e) => (e.target.style.display = "none")}
             />
-            <p className="text-muted small mb-1">
-              &copy; 2025 - 2026, Not Wave Broking Ltd.
+            <p className="text-gray-400 small mb-1">
+              &copy; 2025 - 2026, Wave Broking Ltd.
             </p>
-            <p className="text-muted small">
+            <p className="text-gray-400 small">
               Dedicated Support Portal for trading and account assistance.
             </p>
           </div>
 
           {/* Company */}
           <div className="col-md-3">
-            <h6 className="fw-semibold mb-3">Company</h6>
+            <h6 className="fw-semibold mb-3 text-white">Company</h6>
             <ul className="list-unstyled small">
               <li><Link to="/about" className="footer-link">About</Link></li>
               <li><Link to="/product" className="footer-link">Products</Link></li>
@@ -39,7 +38,7 @@ function Footer() {
 
           {/* Support */}
           <div className="col-md-3">
-            <h6 className="fw-semibold mb-3">Support</h6>
+            <h6 className="fw-semibold mb-3 text-white">Support</h6>
             <ul className="list-unstyled small">
               <li><Link to="/support" className="footer-link">Support Portal</Link></li>
               <li><Link to="/track-ticket" className="footer-link">Track Tickets</Link></li>
@@ -51,7 +50,7 @@ function Footer() {
 
           {/* Account */}
           <div className="col-md-3">
-            <h6 className="fw-semibold mb-3">Account</h6>
+            <h6 className="fw-semibold mb-3 text-white">Account</h6>
             <ul className="list-unstyled small">
               <li><Link to="/signup" className="footer-link">Open an Account</Link></li>
               <li><Link to="/fund-transfer" className="footer-link">Fund Transfer</Link></li>
@@ -62,17 +61,17 @@ function Footer() {
 
         </div>
 
-        <hr className="my-4" />
+        <hr className="my-4 border-white/10" />
 
         {/* Legal Section */}
         <div
-          className="text-muted small"
+          className="text-gray-400 small"
           style={{ fontSize: "13px", lineHeight: "1.8" }}
         >
           <p>
             Wave Broking Ltd. – Member of NSE & BSE.
             Registered Address: Bengaluru, Karnataka, India.
-            For complaints write to <strong>complaints@wave.com</strong>.
+            For complaints write to <strong className="text-white">complaints@wave.com</strong>.
           </p>
 
           <p>
@@ -91,7 +90,7 @@ function Footer() {
           </p>
         </div>
 
-        <div className="text-center text-muted small mt-4 pb-4">
+        <div className="text-center text-gray-400 small mt-4 pb-4">
           Built for seamless customer support and transparent assistance.
         </div>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ImageCard from "../../components/ImageCard";
 
 function LeftSection({
   imageURL,
@@ -16,10 +17,10 @@ function LeftSection({
 
         {/* Left Image */}
         <div className="col-lg-6 mb-4">
-          <img
+          <ImageCard
             src={imageURL}
             alt={productName}
-            className="img-fluid"
+            imageClassName="img-fluid"
           />
         </div>
 

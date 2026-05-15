@@ -60,39 +60,39 @@ const VerticalGraph = ({ data }) => {
       legend: {
         position: "top",
         labels: {
-          color: "#030303",
+          color: "#cbd5e1",
           font: {
             size: 13,
-            weight: "600",
+            weight: "500",
           },
         },
       },
       title: {
         display: true,
         text: "Portfolio Price Comparison",
-        color: "#111",
+        color: "#f8fafc",
         font: {
-          size: 18,
+          size: 16,
           weight: "bold",
         },
         padding: {
-          top: 10,
-          bottom: 25,
+          top: 5,
+          bottom: 15,
         },
       },
       tooltip: {
-        backgroundColor: "#111",
+        backgroundColor: "rgba(15, 23, 42, 0.9)",
         titleColor: "#fff",
         bodyColor: "#fff",
         padding: 12,
-        borderColor: "#333",
+        borderColor: "rgba(255,255,255,0.1)",
         borderWidth: 1,
       },
     },
     scales: {
       x: {
         ticks: {
-          color: "#000000",
+          color: "#94a3b8",
           font: {
             weight: "500",
           },
@@ -104,31 +104,32 @@ const VerticalGraph = ({ data }) => {
       y: {
         beginAtZero: true,
         ticks: {
-          color: "#000000",
+          color: "#94a3b8",
         },
         grid: {
-          color: "rgb(0, 0, 0)",
+          color: "rgba(255, 255, 255, 0.05)",
         },
       },
     },
   };
 
   return (
-  <div
-  style={{
-    width: "100%",
-    maxWidth: "900px",
-    height: "350px",
-    margin: "40px auto",
-    padding: "25px",
-    background: "rgba(255,255,255,0.08)",
-    backdropFilter: "blur(18px)",
-    borderRadius: "20px",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-  }}
->
-  <Bar options={options} data={data} />
-</div>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "800px",
+        height: "220px",
+        margin: "0 auto 15px auto",
+        padding: "15px",
+        background: "rgba(30, 41, 59, 0.4)",
+        backdropFilter: "blur(18px)",
+        borderRadius: "16px",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+      }}
+    >
+      <Bar options={options} data={chartData} />
+    </div>
   );
 };
 

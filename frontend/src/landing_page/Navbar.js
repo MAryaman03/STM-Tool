@@ -5,6 +5,8 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dashboardUrl =
+    process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
 
   useEffect(() => {
     const status = localStorage.getItem("isLoggedIn");
@@ -22,16 +24,17 @@ function Navbar() {
 
   return (
     <nav
-      className="navbar navbar-expand-lg border-bottom"
+      className="navbar navbar-expand-lg navbar-dark"
       style={{
-        background: "radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%)"
+        background: "linear-gradient(135deg, rgba(2, 6, 23, 0.9) 0%, rgba(4, 27, 20, 0.9) 100%)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
       <div className="container">
-        {/* Logo */}
         <Link className="navbar-brand" to="/">
           <img
-            src="/images/logo.svg"
+            src={process.env.PUBLIC_URL + "/images/newlogo.png"}
             alt="Wave Logo"
             style={{ height: "150px", width: "auto" }}
           />
@@ -48,7 +51,6 @@ function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ms-auto">
-
             {isLoggedIn ? (
               <>
                 <li className="nav-item">
@@ -57,11 +59,15 @@ function Navbar() {
                   </Link>
                 </li>
 
-                {/* ✅ Dashboard Link (Separate App) */}
                 <li className="nav-item">
                   <a
                     className="nav-link"
-                    href="http://localhost:3000"   // 🔥 Change port if needed
+                    href={`${dashboardUrl}?auth=${encodeURIComponent(
+                      JSON.stringify({
+                        token: localStorage.getItem("wave_token"),
+                        user: JSON.parse(localStorage.getItem("wave_user") || "{}"),
+                      })
+                    )}`}
                   >
                     Dashboard
                   </a>
@@ -75,7 +81,6 @@ function Navbar() {
               </li>
             )}
 
-            {/* Common Links */}
             <li className="nav-item">
               <Link className={`nav-link ${isActive("/about")}`} to="/about">
                 About

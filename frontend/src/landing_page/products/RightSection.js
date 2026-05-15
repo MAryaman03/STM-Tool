@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ImageCard from "../../components/ImageCard";
 
 function RightSection({
   imageURL,
@@ -34,10 +35,10 @@ function RightSection({
         {/* Image Section */}
         <div className="col-lg-6 text-center order-lg-2 order-1">
           {imageURL && (
-            <img
+            <ImageCard
               src={imageURL}
               alt={productName}
-              className="img-fluid"
+              imageClassName="img-fluid"
               style={{ maxWidth: "90%" }}
             />
           )}

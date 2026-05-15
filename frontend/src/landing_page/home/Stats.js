@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ImageCard from "../../components/ImageCard";
 
 function Stats() {
   const features = [
@@ -47,10 +48,10 @@ function Stats() {
 
           {/* Right Visual */}
           <div className="col-lg-6 text-center">
-            <img
+            <ImageCard
               src="/images/ecosystem.png"
               alt="Wave Ecosystem"
-              className="img-fluid ecosystem-img"
+              imageClassName="img-fluid ecosystem-img"
             />
 
             <div className="mt-4 d-flex justify-content-center gap-4 flex-wrap">
